@@ -39,7 +39,7 @@
        Sit::action_class(A),
        Sit::prior(Prior),
        ( A = start_session(_Project_)
-       ; Prior::holds(existing_project(_Project_)),
+       ; Prior::holds(working_on(_Project_)),
          A \= end_session(_Project_)
        ).
 :- end_object.
