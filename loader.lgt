@@ -27,7 +27,13 @@
 		logtalk_load_context(directory, Directory),
 		atom_concat(Directory, xpce_hooks, Path),
 		consult(Path),
-		logtalk_load([projects, gui_app])
+		logtalk_load([ meta(loader)
+                     , dates(loader)
+                     , hierarchies(loader)
+                     , situations
+                     , persistency
+                     , projects
+                     , gui_app])
 	)).
 
 :- else.
