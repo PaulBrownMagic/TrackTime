@@ -1,0 +1,18 @@
+@startuml
+class project {
+    {field} +name/1
+    {method} +start_session/0
+    {method} +end_session/0
+    {method} +add_session/2
+    {method} +print_out/0
+}
+
+class persistency {
+    {field} +to_file/1
+    {method} +on_start_session/0
+    {method} +on_end_session/0
+    {method} +retrieve_project/1
+    {method} +delete_project/1
+}
+
+@enduml

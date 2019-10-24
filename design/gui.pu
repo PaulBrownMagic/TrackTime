@@ -1,0 +1,34 @@
+@startuml
+
+class xpce {
+    {field} +id/1
+    {field} +size/2
+    {method} +new/2
+    {method} +get/2
+    {method} +send/2-4
+    {method} +init/0
+    {method} +free/0
+}
+
+class window {
+    {method} +open/0
+    {method} +display/1
+    {method} +display/2
+}
+
+class button {
+    {field} on_click/1
+}
+
+class app {
+    {method} init/0
+    {method} exit/0
+}
+
+
+xpce <|-- window : specializes
+xpce <|-- frame : specializes
+xpce <|-- button : specializes
+xpce <|-- app
+
+@enduml
