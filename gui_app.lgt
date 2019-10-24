@@ -22,6 +22,11 @@
        ::id(ID),
        xget(ID, P, O).
 
+   :- public(selected_key/1).
+   selected_key(O) :-
+       ::get(selection, S),
+       xget(S, key, O).
+
    :- public(send/1).
    send(M) :-
        ::id(ID),
@@ -83,37 +88,53 @@
 
 :- end_object.
 
+:- object(app_dialog,
+    extends(xpce)).
+    btn(button(new_project, logtalk(new_project_dialog, init))).
+    btn(button(delete_project, logtalk(app, delete_project))).
+    btn(button(start_work, logtalk(app, start_work))).
+    btn(button(stop_work, logtalk(app, stop_work))).
+    btn(button(exit, logtalk(app, close))).
+
+    init :-
+        ^^new(dialog),
+        forall(btn(B), ^^send(append(B))),
+        self(Self),
+        window::append(Self),
+        ^^send(below(@project_browser)).
+
+:- end_object.
+
+
 :- object(project_name,
     extends(xpce)).
    init :-
-       ^^new(text_item(project_name)).
+       ^^new(text_item(new_project_name)).
 :- end_object.
 
 :- object(new_project_dialog,
     extends(xpce)).
     btn(button(save, logtalk(new_project_dialog, save))).
-    btn(button(exit, logtalk(new_project_dialog, free))).
+    btn(button(cancel, logtalk(new_project_dialog, close))).
 
     init :-
         ^^new(dialog('New Project')),
         project_name::init,
         ::append(project_name),
-        findall(B, btn(B), Btns),
-        meta::map([B]>>(^^send(append(B))), Btns),
-        self(Self),
-        window::append(Self),
-        ^^send(below(@project_browser)).
+        forall(btn(B), ^^send(append(B))),
+        ^^send(open).
 
-    free :-
+    :- public(close/0).
+    close :-
         project_name::free,
-        ^^free.
+        ::free.
 
     :- public(save/0).
     save :-
         project_name::get(selection, ProjectName),
         project_manager::do(create_project(ProjectName)),
         project_browser::update,
-        write(ProjectName), write('\n').
+        ::close.
 
    :- public(append/1).
    append(O) :-
@@ -129,6 +150,31 @@
        project_manager::init,
        window::init,
        project_browser::init,
-       new_project_dialog::init.
+       app_dialog::init, !.
+
+   :- public(close/0).
+   close :-
+       app_dialog::free,
+       project_browser::free,
+       window::free,
+       project_manager::close_out.
+
+   :- public(delete_project/0).
+   delete_project :-
+       project_browser::selected_key(P),
+       project_manager::do(delete_project(P)),
+       project_browser::update.
+
+   :- public(start_work/0).
+   start_work :-
+       project_browser::selected_key(P),
+       writeln(P),
+       project_manager::do(start_session(P)).
+
+   :- public(stop_work/0).
+   stop_work :-
+       project_browser::selected_key(P),
+       writeln(P),
+       project_manager::do(end_session(P)).
 
 :- end_object.

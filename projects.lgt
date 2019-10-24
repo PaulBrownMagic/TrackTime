@@ -59,6 +59,16 @@
         situation::new([], s0),
         asserta(sit(s0)).
 
+    :- public(close_out/0).
+    close_out :-
+        ::sit(S),
+        S::holds(working_on(P)),
+        ::do(end_session(P)),
+        close_out.
+    close_out :-
+        ::sit(S),
+        \+ S::holds(working_on(_)).
+
     :- public(do/1).
     do(Action) :-
         ::sit(S),
