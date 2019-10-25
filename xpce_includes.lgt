@@ -25,6 +25,7 @@
 
 % override the XPCE meta-predicate templates to make them usable from within
 % Logtalk objects and categories
+:- meta_predicate(pce_principal:object(*)).
 :- meta_predicate(pce_principal:new(*,*)).
 :- meta_predicate(pce_principal:send(*,*)).
 :- meta_predicate(pce_principal:send(*,*,*)).
@@ -33,5 +34,5 @@
 
 % allow using the XPCE predicates with implicit qualification
 :- use_module(pce_principal, [
-	new/2 as xnew/2, free/1 as xfree/1, send/2 as xsend/2, send/3 as xsend/3, send/4 as xsend/4, get/3 as xget/3
+	object/1 as xobject/1, new/2 as xnew/2, free/1 as xfree/1, send/2 as xsend/2, send/3 as xsend/3, send/4 as xsend/4, get/3 as xget/3
 ]).

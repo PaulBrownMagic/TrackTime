@@ -8,7 +8,7 @@
            ]).
 
    :- private(file/1).
-   file('/tmp/persistent_storage.pl').
+   file('persistent_storage.pl').
 
    :- public(persist/1).
    :- mode(persist(+object), zero_or_one).
